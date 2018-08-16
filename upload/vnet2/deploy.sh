@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 
-error()
-{
-  echo "ERROR: $*" >&2
-  exit 1
+error() {
+    echo "ERROR: $*" >&2
+    exit 1
 }
 
 templateUri="https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/upload/vnet2/deploy.json"
 parametersUri="https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/upload/vnet2/deploy.parameters.json"
-loc=southbrazil
+loc="brazilsouth"
 query="properties.outputs.vpnGatewayPipId.value"
 
 # Check that both jq and az are installed
-which jq > /dev/null || error "Error: jq must be installed.  Go to https://stedolan.github.io/jq/download/."
-which az > /dev/null || error "Error: az must be installed.  Go to https://aka.ms/GetTheAzureCLI."
+which jq > /dev/null || error "jq must be installed.  Go to https://stedolan.github.io/jq/download/."
+which az > /dev/null || error "az must be installed.  Go to https://aka.ms/GetTheAzureCLI."
 
 # Get the parameters sections of the parameters file as a multi-line variable
 # Use epoch seconds as a querystring to force server to not use the cache
@@ -28,7 +27,7 @@ spokergs=$(jq --raw-output .spokes.value[].resourceGroup <<< "$parameters")
 echo "Checking or creating resource groups:" >&2
 for rg in $hubrg $spokergs
 do az group create --location "$loc" --name "$rg" --output tsv --query name | sed 's/^/- /1'
-done 
+done
 
 # Deploy the ARM template into the hub resource group
 echo "Deploying master template..." >&2
