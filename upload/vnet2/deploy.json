@@ -5,7 +5,7 @@
         "hub": {
             "type": "object",
             "defaultValue": {
-                "resourceGroup": "core",
+                "resourceGroup": "test-leon-core",
                 "vnet": {
                     "name": "core",
                     "addressPrefixes": [
@@ -41,7 +41,7 @@
             "type": "array",
             "defaultValue": [
                 {
-                    "resourceGroup": "spoke1",
+                    "resourceGroup": "test-leon-spoke1",
                     "vnet": {
                         "name": "spoke1",
                         "addressPrefixes": [
@@ -60,7 +60,7 @@
                     ]
                 },
                 {
-                    "resourceGroup": "spoke2",
+                    "resourceGroup": "test-leon-spoke2",
                     "vnet": {
                         "name": "spoke2",
                         "addressPrefixes": [

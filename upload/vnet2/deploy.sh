@@ -7,7 +7,7 @@ error()
 }
 
 templateUri="https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/upload/vnet2/deploy.json"
-parametersUri="https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/upload/vnet/deploy.parameters.json"
+parametersUri="https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/upload/vnet2/deploy.parameters.json"
 loc=southbrazil
 query="properties.outputs.vpnGatewayPipId.value"
 
