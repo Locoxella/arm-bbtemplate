@@ -1,0 +1,16 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "apiProfile": "2017-03-09-profile",
+    "contentVersion": "0.0.0.1",
+    "parameters": {
+        "vnet-rgname": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the resource group"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [],
+    "outputs": {}
+}
