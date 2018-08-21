@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for the virtualMachine"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for this deployment {tagname:'value',...}"
+            }
+        },
+        "admin": {
+            "type": "secureObject",
+            "metadata": {
+                "description": "VM credentials for admin account {username:'',password:''}"
+            }
+        },
+        "networkInterfacesREF": {
+            "type": "object",
+            "metadate": {
+                "description": "Reference to networkInterfaces for this VM"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2017-03-30",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('name')]",
+            "location": "[resourceGroup().location]",
+            "tags": "[parameters('tags')]",
+            "dependsOn": [
+                "[parameters('networkInterfacesREF')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_A2"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('name')]",
+                    "adminUsername": "[parameters('admin').username]",
+                    "adminPassword": "[parameters('admin').password]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2012-R2-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat(parameters('name'), 'OSDisk')]",
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[parameters('networkInterfacesREF').id]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "virtualMachinesREF": "[reference(parameters('name'), '2017-03-30', 'Full')]"
+    }
+}

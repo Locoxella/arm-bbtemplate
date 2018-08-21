@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "apiProfile": "2017-03-09-profile",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the capsule"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for resources on this deploy"
+            }
+        }
+    },
+    "variables": {
+        "_artifactsLocation": "[coalesce(parameters('_artifactsLocation'), uri(deployment().properties.templateLink.uri, ''))]"
+    },
+    "resources": [
+        {
+            "name": "virtualNetwork",
+            "type": "Microsoft.Resources/deployments",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "mode": "Complete",
+                "templateLink": {
+                    "uri": "[concat(variables('_artifactsLocation'), 'basic/Microsoft.Network/virtualNetworks/template.json', parameters('_artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": "[concat(parameters('name'), '-vnet' )]",
+                    "tags": "[parameters('tags')]",
+                    "_artifactsLocation": "[variables('_artifactsLocation')]",
+                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]"
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "baseURI": "[variables('_artifactsLocation')]"
+    }
+}

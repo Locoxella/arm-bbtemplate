@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+           "type": "string",
+           "metadata": {
+                "description": ""
+            }
+        },
+        "linkedResources": {
+           "type": "array",
+           "metadata": {
+                "description": "List of resources to link to this NICs ipConfigurations"
+            },
+            "defaultValue": [
+                
+            ]
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('name')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "Microsoft.Network/publicIPAddresses/WindowsVM1-PublicIP",
+                "Microsoft.Network/virtualNetworks/WindowsVM1-VirtualNetwork"
+            ],
+            "tags": {
+                "displayName": "[parameters('name')]"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'WindowsVM1-PublicIP')]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', 'WindowsVM1-VirtualNetwork'), '/subnets/WindowsVM1-VirtualNetwork-Subnet')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+           "type": "string",
+           "metadata": {
+                "description": "Name for the vnet"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": null,
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+           "type": "object",
+           "metadata": {
+                "description": "Tags for the vnet and subnet/s"
+            }
+        },
+        "subnets": {
+           "type": "object",
+           "defaultValue": null,
+           "metadata": {
+                "description": ""
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('name')]",
+            "location": "[resourceGroup().location]",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": "[parameters('subnets')]"
+            }
+        }
+    ],
+    "outputs": {}
+}
