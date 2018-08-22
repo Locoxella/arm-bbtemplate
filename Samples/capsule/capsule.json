@@ -11,14 +11,14 @@
         },
         "_artifactsLocation": {
             "type": "string",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Base uri of the artifacts"
             }
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Parameters for uri of the artifacts"
             }

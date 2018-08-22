@@ -3,56 +3,59 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-           "type": "string",
-           "metadata": {
+            "type": "string",
+            "defaultValue": "[concat(resourceGroup().name, '-virtualNetworks-', uniqueString(resourceGroup().id))]",
+            "metadata": {
                 "description": "Name for the vnet"
             }
         },
         "_artifactsLocation": {
             "type": "string",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Base uri of the artifacts"
             }
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Parameters for uri of the artifacts"
             }
         },
         "tags": {
-           "type": "object",
-           "metadata": {
+            "type": "object",
+            "metadata": {
                 "description": "Tags for the vnet and subnet/s"
             }
         },
-        "subnets": {
-           "type": "object",
-           "defaultValue": null,
+        "addressPrefixes": {
+           "type": "array",
            "metadata": {
-                "description": ""
+                "description": "Addresses for this VNET on CIDR notation"
             }
         }
     },
     "variables": {},
     "resources": [
         {
-            "apiVersion": "2015-06-15",
+            "comments": "http manual or shortdescription",
+            "apiVersion": "2018-02-01",
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[parameters('name')]",
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "properties": {
                 "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/16"
-                    ]
-                },
-                "subnets": "[parameters('subnets')]"
+                    "addressPrefixes": "[parameters('addressPrefixes')]"
+                }
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "virtualNetworksREF": {
+            "type": "array",
+            "value": "[array(reference(parameters('name'), '2018-02-01', 'Full'))]"
+        }
+    }
 }
