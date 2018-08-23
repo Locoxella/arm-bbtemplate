@@ -1,0 +1,98 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "securityRules": {
+            "type": "array",
+            "metadata": {
+                "description": "Security Rules to return from variables securityRules list"
+            }
+        },
+        "source": {
+            "type": "string",
+            "defaultValue": "*",
+            "metadata": {
+                "description": "CIDR address of the source for all the rules"
+            }
+        },
+        "destination": {
+            "type": "string",
+            "defaultValue": "*",
+            "metadata": {
+                "description": "CIDR address of the destination or subnet where this rules will be applied"
+            }
+        }
+    },
+    "variables": {
+        "securityRulesSet": [
+            {
+                "name": "RDPAllow",
+                "properties": {
+                    "description": "allow RDP connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "[parameters('source')]",
+                    "destinationAddressPrefix": "[parameters('destination')]",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "3389",
+                    "access": "Allow",
+                    "protocol": "Tcp"
+                }
+            },
+            {
+                "name": "HTTPAllow",
+                "properties": {
+                    "description": "allow HTTP connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "[parameters('source')]",
+                    "destinationAddressPrefix": "[parameters('destination')]",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "80",
+                    "access": "Allow",
+                    "protocol": "Tcp"
+                }
+            },
+            {
+                "name": "DefaultInDeny",
+                "properties": {
+                    "description": "deny incoming connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "access": "Deny",
+                    "protocol": "*"
+                }
+            },
+            {
+                "name": "DefaultOutAllow",
+                "properties": {
+                    "description": "allow outgoing connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "access": "Deny",
+                    "protocol": "*"
+                }
+            }
+        ],
+        "copy": [
+            {
+                "name": "securityRules",
+                "count": "[length(variables('securityRulesSet'))]",
+                "input": {
+                    "rule": "[if(contains(parameters('securityRules'), variables('securityRulesSet')[copyIndex('securityRules')].name), variables('securityRulesSet')[copyIndex('securityRules')], json('null'))]"
+                }
+            }
+        ]
+    },
+    "resources": [],
+    "outputs": {
+        "result": {
+            "type": "object",
+            "value": "[variables('securityRules')]"
+        }
+    }
+}

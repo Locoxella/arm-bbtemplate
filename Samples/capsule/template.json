@@ -1,0 +1,93 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "array",
+            "metadata": {
+                "description": "Names for the capsules"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "[uri(deployment().properties.templateLink.uri, '')]",
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for resources on this deploy"
+            }
+        },
+        "addressPrefix": {
+            "type": "array",
+            "metadata": {
+                "description": "Array of address prefix for each subnet of the capsules"
+            }
+        },
+        "virtualNetworksParentREF": {
+            "type": "string",
+            "metadata": {
+                "description": "Full object reference to host virtualNetwork for capsule's subnet"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "subnet",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-02-01",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "mode": "Complete",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Network/virtualNetworks/subnets/template.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": "[concat(parameters('name'), '-subnet' )]",
+                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
+                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "tags": "[parameters('tags')]",
+                    "addressPrefix": "[parameters('addressPrefix')]",
+                    "virtualNetworksParentREF": "[parameters('virtualNetworksParentREF')]"
+                }
+            }
+        },
+        {
+            "name": "keyvault",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-02-01",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "mode": "Complete",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.KeyVault/vaults/template.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": "[concat(parameters('name'), '-keyvault' )]",
+                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
+                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "tags": "[parameters('tags')]"
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "subnets": {
+            "type": "object",
+            "value": "[reference('subnet').outputs.subnetREF]"
+        }
+    }
+}

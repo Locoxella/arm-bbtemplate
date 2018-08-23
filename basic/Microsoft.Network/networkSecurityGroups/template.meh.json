@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "apiProfile": "2017-03-09-profile",
+    "parameters": {
+        "networkSecurityGroupsSettings": {
+            "type": "object"
+        },
+        "artifactsLocationSasToken": {
+            "type": "securestring"
+        }
+    },
+    "variables": {},
+    "functions": [
+        {
+            "namespace": "ey",
+            "members": {
+                "relativeURI": {
+                    "parameters": [
+                        {
+                            "name": "resource",
+                            "type": "string",
+                            "metadata": {
+                                "description": "Resource file path relative to main template."
+                            }
+                        },
+                        {
+                            "name": "parameters",
+                            "type": "securestring",
+                            "metadata": {
+                                "description": "Parameters of the URI (like a SAS token)."
+                            }
+                        }
+                    ],
+                    "output": {
+                        "type": "string",
+                        "value": "[concat(uri(deployment().properties.templateLink.uri, parameters('resource')), parameters('parameters'))]"
+                    }
+                }
+            }
+        }
+    ],
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "collector",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[ey.relativeURI('collector.json', parameters('artifactsLocationSasToken'))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "source": {
+                        "value": "[parameters('networkSecurityGroupsSettings').securityRules]"
+                    },
+                    "transformTemplateUri": {
+                        "value": "[ey.relativeURI('transform.json', parameters('artifactsLocationSasToken'))]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "networkSecurityGroup1",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": "[reference('collector').outputs.result.value]"
+            }
+        }
+    ],
+    "outputs": {
+        "instance": {
+            "type": "array",
+            "value": "[reference('collector').outputs.result.value]"
+        }
+    }
+}

@@ -3,10 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "type": "string",
-            "defaultValue": "[concat(resourceGroup().name, '-subnets-', uniqueString(resourceGroup().id))]",
+            "type": "array",
+            "defaultValue": [
+                "[concat(resourceGroup().name, '-subnets-', uniqueString(resourceGroup().id))]"
+            ],
             "metadata": {
-                "description": "Name for the vnet"
+                "description": "Name for this resource"
+            }
+        },
+        "replica": {
+            "type": "int",
+            "defaultValue": "[length(parameters('name'))]",
+            "metadata": {
+                "description": "Amount of resources like this to deploy."
             }
         },
         "_artifactsLocation": {
@@ -26,7 +35,7 @@
         "tags": {
             "type": "object",
             "metadata": {
-                "description": "Tags for the vnet and subnet/s"
+                "description": "Tags for this resources"
             }
         },
         "addressPrefix": {
@@ -69,19 +78,24 @@
     "resources": [
         {
             "comments": "El name hace el last del split del path del resource id, ya que los hijos deben nombrarse padre/hijo",
-            "name": "[concat(last(split(parameters('virtualNetworksParentREF').resourceId, '/')), '/', parameters('name'))]",
+            "name": "[concat(last(split(parameters('virtualNetworksParentREF').resourceId, '/')), '/', parameters('name')[copyIndex('subnets-copy')])]",
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2017-10-01",
             "location": "[resourceGroup().location]",
+            "tags": "[parameters('tags')]",
+            "copy": {
+                "name": "subnets-copy",
+                "count": "[parameters('replica')]"
+            },
             "properties": {
-                "addressPrefix": "[parameters('addressPrefix')]"
+                "addressPrefix": "[parameters('addressPrefix')[copyIndex('subnets-copy')]]"
             }
         }
     ],
     "outputs": {
-        "subnetREF": {
+        "result": {
             "type": "array",
-            "value": ["[array(reference(parameters('name'), '2017-10-01', 'Full'))]"]
+            "value": ["[array(reference(parameters('name')[0], '2017-10-01', 'Full'))]"]
         }
     }
 }

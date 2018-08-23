@@ -1,0 +1,84 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string",
+            "defaultValue": [
+                "[concat(resourceGroup().name, '-securityrule-', uniqueString(resourceGroup().id))]"
+            ],
+            "metadata": {
+                "description": "Name for this resource"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for this resources"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "apiVersion": "2018-06-01",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "description": "string",
+                "protocol": "string",
+                "sourcePortRange": "string",
+                "destinationPortRange": "string",
+                "sourceAddressPrefix": "string",
+                "sourceAddressPrefixes": [
+                    "string"
+                ],
+                "sourceApplicationSecurityGroups": [
+                    {
+                        "id": "string",
+                        "location": "string",
+                        "tags": {},
+                        "properties": {}
+                    }
+                ],
+                "destinationAddressPrefix": "string",
+                "destinationAddressPrefixes": [
+                    "string"
+                ],
+                "destinationApplicationSecurityGroups": [
+                    {
+                        "id": "string",
+                        "location": "string",
+                        "tags": {},
+                        "properties": {}
+                    }
+                ],
+                "sourcePortRanges": [
+                    "string"
+                ],
+                "destinationPortRanges": [
+                    "string"
+                ],
+                "access": "string",
+                "priority": "integer",
+                "direction": "string"
+            }
+        }
+    ],
+    "outputs": {}
+}

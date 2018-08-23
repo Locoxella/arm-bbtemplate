@@ -1,78 +1,49 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "apiProfile": "2017-03-09-profile",
     "parameters": {
-        "networkSecurityGroupsSettings": {
-            "type": "object"
+        "name": {
+            "type": "string",
+            "defaultValue": [
+                "[concat(resourceGroup().name, '-nsg')]"
+            ],
+            "metadata": {
+                "description": "Name for this resource"
+            }
         },
-        "artifactsLocationSasToken": {
-            "type": "securestring"
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for this resources"
+            }
         }
     },
     "variables": {},
-    "functions": [
-        {
-            "namespace": "ey",
-            "members": {
-                "relativeURI": {
-                    "parameters": [
-                        {
-                            "name": "resource",
-                            "type": "string",
-                            "metadata": {
-                                "description": "Resource file path relative to main template."
-                            }
-                        },
-                        {
-                            "name": "parameters",
-                            "type": "securestring",
-                            "metadata": {
-                                "description": "Parameters of the URI (like a SAS token)."
-                            }
-                        }
-                    ],
-                    "output": {
-                        "type": "string",
-                        "value": "[concat(uri(deployment().properties.templateLink.uri, parameters('resource')), parameters('parameters'))]"
-                    }
-                }
-            }
-        }
-    ],
     "resources": [
         {
-            "type": "Microsoft.Resources/deployments",
-            "name": "collector",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[ey.relativeURI('collector.json', parameters('artifactsLocationSasToken'))]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "source": {
-                        "value": "[parameters('networkSecurityGroupsSettings').securityRules]"
-                    },
-                    "transformTemplateUri": {
-                        "value": "[ey.relativeURI('transform.json', parameters('artifactsLocationSasToken'))]"
-                    }
-                }
-            }
-        },
-        {
+            "apiVersion": "2018-02-01",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "networkSecurityGroup1",
+            "name": "[parameters('name')]",
             "location": "[resourceGroup().location]",
+            "tags": "[parameters('tags')]",
             "properties": {
-                "securityRules": "[reference('collector').outputs.result.value]"
+                "securityRules": []
             }
         }
     ],
-    "outputs": {
-        "instance": {
-            "type": "array",
-            "value": "[reference('collector').outputs.result.value]"
-        }
-    }
+    "outputs": {}
 }

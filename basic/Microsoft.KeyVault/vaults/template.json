@@ -3,23 +3,51 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-           "type": "string",
-           "metadata": {
-                "description": "Name for the keyvault"
+            "type": "array",
+            "defaultValue": [
+                "[concat(resourceGroup().name, '-keyvault')]"
+            ],
+            "metadata": {
+                "description": "Name for this resource/s"
+            }
+        },
+        "replica": {
+            "type": "int",
+            "defaultValue": "[length(parameters('name'))]",
+            "metadata": {
+                "description": "Amount of resources like this to deploy."
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Base uri of the artifacts"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Parameters for uri of the artifacts"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for this resource/s"
             }
         }
     },
     "variables": {},
     "resources": [
         {
-           "type": "Microsoft.KeyVault/vaults",
-           "apiVersion": "2015-06-01",
-           "name": "[parameters('name')]",
-           "location": "[resourceGroup().location]",
-           "tags": {
-               "displayName": "[parameters('name')]"
-           },
-           "properties": {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2015-06-01",
+            "name": "[parameters('name')]",
+            "location": "[resourceGroup().location]",
+            "tags": "[parameters('tags')]",
+            "properties": {
                 "enabledForDeployment": true,
                 "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": true,
@@ -30,9 +58,9 @@
                         "tenantId": "TENANT ID",
                         "objectId": "OBJECT ID",
                         "permissions": {
-                           "keys": "Get",
-                           "secrets": "List,Get,Set"
-                       }
+                            "keys": "Get",
+                            "secrets": "List,Get,Set"
+                        }
                     }
                 ],
                 "sku": {
@@ -41,18 +69,26 @@
                 }
             },
             "resources": [
-              {
-                "type": "secrets",
-                "name": "KeyvaultSecret1",
-                "apiVersion": "2015-06-01",
-                "properties": {
-                   "value": "KeyvaultSecretValue1"
-                 },
-                "dependsOn": [
-                   "[concat('Microsoft.KeyVault/vaults/', Keyvault1)]"
-                 ]
-              }]
+                {
+                    "type": "secrets",
+                    "name": "KeyvaultSecret1",
+                    "apiVersion": "2015-06-01",
+                    "properties": {
+                        "value": "KeyvaultSecretValue1"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.KeyVault/vaults/', parameters('name'))]"
+                    ]
+                }
+            ]
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "result": {
+            "type": "array",
+            "value": [
+                "[array(reference(parameters('name')[0], '2015-06-01', 'Full'))]"
+            ]
+        }
+    }
 }
