@@ -5,7 +5,7 @@
         "name": {
             "type": "string",
             "metadata": {
-                "description": "Name for the capsule"
+                "description": "Name for this resource"
             }
         },
         "_artifactsLocation": {
@@ -25,7 +25,7 @@
         "tags": {
             "type": "object",
             "metadata": {
-                "description": "Tags for all resources on this deploy"
+                "description": "Tags for this resources"
             }
         },
         "addressPrefix": {
@@ -35,15 +35,20 @@
             }
         },
         "virtualNetworksParentREF": {
-            "type": "string",
+            "type": "object",
             "metadata": {
-                "description": "Full object reference to host virtualNetwork for capsule's subnet"
+                "description": "Object reference to host virtualNetwork for capsule's subnet"
+            }
+        },
+        "rulesSet": {
+            "type": "object",
+            "defaultValue": "[json('null')]",
+            "metadata": {
+                "description": "Rules for the networkSecurityGroup of the subnet https://../../basic/Microsoft.Network/networkSecurityGroups/securityRules/help.md#need-security-rules"
             }
         }
     },
-    "variables": {
-        "ruleSet": "[json('null')]"
-    },
+    "variables": {},
     "resources": [
         {
             "name": "subnet",
@@ -60,9 +65,9 @@
                     "name": "[concat(parameters('name'), '-subnet' )]",
                     "_artifactsLocation": "[parameters('_artifactsLocation')]",
                     "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
-                    "tags": "[parameters('tags')]",
                     "addressPrefix": "[parameters('addressPrefix')]",
-                    "virtualNetworksParentREF": "[parameters('virtualNetworksParentREF')]"
+                    "virtualNetworksParentREF": "[parameters('virtualNetworksParentREF')]",
+                    "ruleSet": "[parameters('rulesSet')]"
                 }
             }
         },

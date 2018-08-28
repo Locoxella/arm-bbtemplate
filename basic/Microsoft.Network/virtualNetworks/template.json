@@ -4,9 +4,9 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "[concat(resourceGroup().name, '-virtualNetworks-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(resourceGroup().name, '-vnet')]",
             "metadata": {
-                "description": "Name for the vnet"
+                "description": "Name for this resource"
             }
         },
         "_artifactsLocation": {
@@ -26,7 +26,7 @@
         "tags": {
             "type": "object",
             "metadata": {
-                "description": "Tags for the vnet and subnet/s"
+                "description": "Tags for this resources"
             }
         },
         "addressPrefixes": {
@@ -41,8 +41,8 @@
         {
             "comments": "http manual or shortdescription",
             "apiVersion": "2018-02-01",
-            "type": "Microsoft.Network/virtualNetworks",
             "name": "[parameters('name')]",
+            "type": "Microsoft.Network/virtualNetworks",
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "properties": {
@@ -54,8 +54,8 @@
     ],
     "outputs": {
         "virtualNetworksREF": {
-            "type": "array",
-            "value": "[array(reference(parameters('name'), '2018-02-01', 'Full'))]"
+            "type": "object",
+            "value": "[reference(parameters('name'), '2018-02-01', 'Full')]"
         }
     }
 }

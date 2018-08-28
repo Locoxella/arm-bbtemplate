@@ -3,19 +3,12 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "type": "array",
+            "type": "string",
             "defaultValue": [
-                "[concat(resourceGroup().name, '-subnets-', uniqueString(resourceGroup().id))]"
+                "[concat(resourceGroup().name, '-subnets')]"
             ],
             "metadata": {
                 "description": "Name for this resource"
-            }
-        },
-        "replica": {
-            "type": "int",
-            "defaultValue": "[length(parameters('name'))]",
-            "metadata": {
-                "description": "Amount of resources like this to deploy."
             }
         },
         "_artifactsLocation": {
@@ -32,16 +25,10 @@
                 "description": "Parameters for uri of the artifacts"
             }
         },
-        "tags": {
-            "type": "object",
-            "metadata": {
-                "description": "Tags for this resources"
-            }
-        },
         "addressPrefix": {
-            "type": "array",
+            "type": "string",
             "metadata": {
-                "description": "CIDR address for each subnet of the replica"
+                "description": "CIDR address for this subnet"
             }
         },
         "virtualNetworksParentREF": {
@@ -49,53 +36,28 @@
             "metadata": {
                 "description": "Reference to parent virtualNetwork of this subnet"
             }
-        }
+        },
+
     },
-    "variables": {},
-    "functions": [
-        {
-            "namespace": "ey",
-            "members": {
-                "shortreplica": {
-                    "parameters": [
-                        {
-                            "name": "name",
-                            "type": "array"
-                        },
-                        {
-                            "name": "replica",
-                            "type": "int"
-                        }
-                    ],
-                    "output": {
-                        "type": "int",
-                        "value": "[if(greater(parameters('replica'),length(parameters('name'))),sub(parameters('replica'),length(parameters('name'))),0)]"
-                    }
-                }
-            }
-        }
-    ],
+    "variables": {
+        "virtualNetworksParentREF": "[concat(last(split(parameters('virtualNetworksParentREF').resourceId, '/' )), '/', parameters('name'))]"
+    },
     "resources": [
         {
             "comments": "El name hace el last del split del path del resource id, ya que los hijos deben nombrarse padre/hijo",
-            "name": "[concat(last(split(parameters('virtualNetworksParentREF').resourceId, '/')), '/', parameters('name')[copyIndex('subnets-copy')])]",
+            "apiVersion": "2016-06-01",
+            "name": "[variables('virtualNetworksParentREF')]",
             "type": "Microsoft.Network/virtualNetworks/subnets",
-            "apiVersion": "2017-10-01",
             "location": "[resourceGroup().location]",
-            "tags": "[parameters('tags')]",
-            "copy": {
-                "name": "subnets-copy",
-                "count": "[parameters('replica')]"
-            },
             "properties": {
-                "addressPrefix": "[parameters('addressPrefix')[copyIndex('subnets-copy')]]"
+                "addressPrefix": "[parameters('addressPrefix')]",
             }
         }
     ],
     "outputs": {
         "result": {
-            "type": "array",
-            "value": ["[array(reference(parameters('name')[0], '2017-10-01', 'Full'))]"]
+            "type": "object",
+            "value": "[reference(parameters('name'), '2016-06-01', 'Full')]"
         }
     }
 }
