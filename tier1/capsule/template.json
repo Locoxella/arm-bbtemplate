@@ -44,7 +44,7 @@
             "type": "object",
             "defaultValue": "[json('null')]",
             "metadata": {
-                "description": "Rules for the networkSecurityGroup of the subnet https://../../basic/Microsoft.Network/networkSecurityGroups/securityRules/help.md#need-security-rules"
+                "description": "Rules for the networkSecurityGroup of the subnet /basic/Microsoft.Network/networkSecurityGroups/securityRules/help.md#need-security-rules"
             }
         }
     },
@@ -98,7 +98,7 @@
             "properties": {
                 "mode": "Complete",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Compute/virtualMachines/template.json', parameters('_artifactsLocationSasToken')))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Network/networkSecurityGroups/template.json', parameters('_artifactsLocationSasToken')))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -106,7 +106,7 @@
                     "_artifactsLocation": "[parameters('_artifactsLocation')]",
                     "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
                     "tags": "[parameters('tags')]",
-                    "ruleSet": "[variables('ruleSet')]"
+                    "ruleSet": "[parameters('rulesSet')]"
                 }
             }
         },
