@@ -1,0 +1,54 @@
+[
+    {
+        "name": "RDPAllow",
+        "properties": {
+            "description": "allow RDP connections",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "[parameters('source')",
+            "destinationAddressPrefix": "[parameters('destination')]",
+            "sourcePortRange": "*",
+            "destinationPortRange": "3389",
+            "access": "Allow",
+            "protocol": "Tcp"
+        }
+    },
+    {
+        "name": "HTTPAllow",
+        "properties": {
+            "description": "allow HTTP connections",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "[parameters('source')]",
+            "destinationAddressPrefix": "[parameters('destination')]",
+            "sourcePortRange": "*",
+            "destinationPortRange": "80",
+            "access": "Allow",
+            "protocol": "Tcp"
+        }
+    },
+    {
+        "name": "DefaultInDeny",
+        "properties": {
+            "description": "deny incoming connections",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
+            "sourcePortRange": "*",
+            "destinationPortRange": "*",
+            "access": "Deny",
+            "protocol": "*"
+        }
+    },
+    {
+        "name": "DefaultOutAllow",
+        "properties": {
+            "description": "allow outgoing connections",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
+            "sourcePortRange": "*",
+            "destinationPortRange": "*",
+            "access": "Deny",
+            "protocol": "*"
+        }
+    }
+]

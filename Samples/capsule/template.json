@@ -3,9 +3,9 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "type": "array",
+            "type": "string",
             "metadata": {
-                "description": "Names for the capsules"
+                "description": "Name for the capsule"
             }
         },
         "_artifactsLocation": {
@@ -25,13 +25,13 @@
         "tags": {
             "type": "object",
             "metadata": {
-                "description": "Tags for resources on this deploy"
+                "description": "Tags for all resources on this deploy"
             }
         },
         "addressPrefix": {
             "type": "array",
             "metadata": {
-                "description": "Array of address prefix for each subnet of the capsules"
+                "description": "CIDR address prefix for the subnet of the capsule"
             }
         },
         "virtualNetworksParentREF": {
@@ -41,7 +41,9 @@
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "ruleSet": "[json('null')]"
+    },
     "resources": [
         {
             "name": "subnet",
@@ -82,10 +84,49 @@
                     "tags": "[parameters('tags')]"
                 }
             }
+        },
+        {
+            "name": "nsg",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-02-01",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "mode": "Complete",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Compute/virtualMachines/template.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": "[concat(parameters('name'), '-nsg' )]",
+                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
+                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "tags": "[parameters('tags')]",
+                    "ruleSet": "[variables('ruleSet')]"
+                }
+            }
+        },
+        {
+            "name": "vm-dns",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-02-01",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "mode": "Complete",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Compute/virtualMachines/template.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "name": "[concat(parameters('name'), '-vm' )]",
+                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
+                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "tags": "[parameters('tags')]"
+                }
+            }
         }
     ],
     "outputs": {
-        "subnets": {
+        "subnet": {
             "type": "object",
             "value": "[reference('subnet').outputs.subnetREF]"
         }

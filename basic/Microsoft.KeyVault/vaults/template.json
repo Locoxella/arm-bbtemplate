@@ -11,13 +11,6 @@
                 "description": "Name for this resource/s"
             }
         },
-        "replica": {
-            "type": "int",
-            "defaultValue": "[length(parameters('name'))]",
-            "metadata": {
-                "description": "Amount of resources like this to deploy."
-            }
-        },
         "_artifactsLocation": {
             "type": "string",
             "defaultValue": "",
@@ -87,7 +80,7 @@
         "result": {
             "type": "array",
             "value": [
-                "[array(reference(parameters('name')[0], '2015-06-01', 'Full'))]"
+                "[reference(parameters('name'), '2015-06-01', 'Full')]"
             ]
         }
     }

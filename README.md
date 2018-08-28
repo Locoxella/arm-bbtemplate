@@ -1,1 +1,7 @@
-# arm-bbtemplate
+# ARM template guidelines ideas
+## Template output
+- Each template should output a full reference to what it deploys.
+- Calling a template output through the use [reference function](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-functions-resource#reference) passing the name of the deployment (not the resource id) creates an implicit dependency, making unnecessary the use of depends on.
+## The Dont's
+- Do not try to do multiple deployments of objects other than Microsoft.Resources/deployments on the template you are creating. Only Azure's deployments objects should be deployed more than one time through the use of a copy section. Any structure which needs to be deployed several times could be managed as a new BB on the template that is being created providing the same reusability to others. There's always time later to discard a template because of it's lack of usefulness.
+- There's no point on trying to provide multideployment support to caller templates from whitin a child. Trying to parametrize the amount of resources to deploy inside a template steals the logic of handling those resources dependencies from the parent template. There's no practical way of reuse the objects deployed by a template on the parent if the parent is not in charge of handling the copies.

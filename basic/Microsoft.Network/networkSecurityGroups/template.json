@@ -30,6 +30,13 @@
             "metadata": {
                 "description": "Tags for this resources"
             }
+        },
+        "ruleSet": {
+            "type": "object",
+            "defaultValue": "[json('null')]",
+            "metadata": {
+                "description": "Security Rules"
+            }
         }
     },
     "variables": {},
@@ -41,9 +48,14 @@
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "properties": {
-                "securityRules": []
+                "securityRules": "[parameters('ruleSet')]"
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "result": {
+            "type": "object",
+            "value": "[reference(parameters('name'), '2018-02-01', 'Full')]"
+        }
+    }
 }
