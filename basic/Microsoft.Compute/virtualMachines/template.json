@@ -85,6 +85,9 @@
         }
     ],
     "outputs": {
-        "virtualMachinesREF": "[reference(parameters('name'), '2017-03-30', 'Full')]"
+        "virtualMachinesREF": {
+            "type": "object",
+            "value": "[reference(parameters('name'), '2017-03-30', 'Full')]"
+        }
     }
 }

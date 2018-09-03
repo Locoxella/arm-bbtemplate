@@ -54,7 +54,6 @@
             "name": "capsule-subnet",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
-            "tags": "[parameters('tags')]",
             "properties": {
                 "mode": "Complete",
                 "templateLink": {
@@ -75,7 +74,6 @@
             "name": "capsule-keyvault",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
-            "tags": "[parameters('tags')]",
             "properties": {
                 "mode": "Complete",
                 "templateLink": {
@@ -94,7 +92,6 @@
             "name": "capsule-nsg",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
-            "tags": "[parameters('tags')]",
             "properties": {
                 "mode": "Complete",
                 "templateLink": {
@@ -114,7 +111,6 @@
             "name": "capsule-vm-dns",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
-            "tags": "[parameters('tags')]",
             "properties": {
                 "mode": "Complete",
                 "templateLink": {
