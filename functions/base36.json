@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "number": {
+            "type": "int",
+            "maxValue": 46655,
+            "metadata": {
+                "description": ""
+            }
+        }
+    },
+    "variables": {},
+    "functions": [
+        {
+            "namespace": "ey",
+            "members": {
+                "base36": {
+                    "parameters": [
+                        {
+                            "name": "number",
+                            "type": "int"
+                        }
+                    ],
+                    "output": {
+                        "type": "string",
+                        "value": "[concat(div(parameters('number'), 1296), div(parameters('number'), 36), substring('0123456789abcdefghijklmnopqrstuvwxyz', mod(parameters('number'), 36), 1) )]"
+                    }
+                }
+            }
+        }
+    ],
+    "resources": [],
+    "outputs": {
+        "result": {
+            "type": "string",
+            "value": "[ey.base36(parameters('number'))]"
+        }
+    }
+}

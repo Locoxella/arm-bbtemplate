@@ -5,7 +5,7 @@
         "name": {
             "type": "string",
             "defaultValue": [
-                "[concat(resourceGroup().name, '-subnets')]"
+                "[concat(take(resourceGroup().name, 10), 'SBNZZ')]"
             ],
             "metadata": {
                 "description": "Name for this resource"
@@ -36,21 +36,22 @@
             "metadata": {
                 "description": "Reference to parent virtualNetwork of this subnet"
             }
-        },
-
+        }
     },
     "variables": {
-        "virtualNetworksParentREF": "[concat(last(split(parameters('virtualNetworksParentREF').resourceId, '/' )), '/', parameters('name'))]"
+        "vnetREFskel": "[json('{\"name\":null,\"resourceId\":null}')]",
+        "vnetREFcoalescer": "[union(variables('vnetREFskel'), parameters('virtualNetworksParentREF'))]",
+        "vnetREF": "[last(split(coalesce(variables('vnetREFcoalescer').name, variables('vnetREFcoalescer').resourceId), '/'))]"
     },
     "resources": [
         {
-            "comments": "El name hace el last del split del path del resource id, ya que los hijos deben nombrarse padre/hijo",
+            "comments": "Los hijos deben nombrarse padre/hijo. var vnetREF es el .name o .resourceId de param virtualNetworksParentREF",
             "apiVersion": "2016-06-01",
-            "name": "[variables('virtualNetworksParentREF')]",
+            "name": "[concat(variables('vnetREF'), '/', parameters('name'))]",
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "location": "[resourceGroup().location]",
             "properties": {
-                "addressPrefix": "[parameters('addressPrefix')]",
+                "addressPrefix": "[parameters('addressPrefix')]"
             }
         }
     ],

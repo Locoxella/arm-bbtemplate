@@ -5,7 +5,7 @@
         "name": {
             "type": "array",
             "defaultValue": [
-                "[concat(resourceGroup().name, '-keyvault')]"
+                "[concat(resourceGroup().name, 'AKVZZ')]"
             ],
             "metadata": {
                 "description": "Name for this resource/s"
@@ -45,11 +45,11 @@
                 "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": true,
                 "enableSoftDelete": "true",
-                "tenantId": "TENANT ID",
+                "tenantId": "[subscription().tenantId]",
                 "accessPolicies": [
                     {
-                        "tenantId": "TENANT ID",
-                        "objectId": "OBJECT ID",
+                        "tenantId": "[subscription().tenantId]",
+                        "objectId": "[subscription().subscriptionId]",
                         "permissions": {
                             "keys": "Get",
                             "secrets": "List,Get,Set"

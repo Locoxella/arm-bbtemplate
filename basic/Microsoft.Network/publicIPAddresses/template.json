@@ -4,8 +4,9 @@
     "parameters": {
         "name": {
            "type": "string",
+           "defaultValue": "[concat(take(resourceGroup().name, 10), 'PIPZZ')]",
            "metadata": {
-                "description": "Name for Public IP Address"
+               "description": "Name for this resource"
             }
         },
         "properties": {
@@ -23,7 +24,7 @@
         "tags": {
             "type": "object",
             "metadata": {
-                "description": "Tags for this deployment {tagname:'value',...}"
+                "description": "Tags for this resources"
             }
         }
     },
