@@ -18,14 +18,43 @@
             }
         },
         "ruleSet": {
-            "type": "object",
-            "defaultValue": "[json('null')]",
+            "type": "array",
+            "defaultValue": "[array(json('null'))]",
             "metadata": {
                 "description": "Security Rules"
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "ruleSetDefault": [
+            {
+                "name": "DefaultInDeny",
+                "properties": {
+                    "description": "deny incoming connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "access": "Deny",
+                    "protocol": "*"
+                }
+            },
+            {
+                "name": "DefaultOutAllow",
+                "properties": {
+                    "description": "allow outgoing connections",
+                    "direction": "Inbound",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "access": "Deny",
+                    "protocol": "*"
+                }
+            }
+        ]
+    },
     "resources": [
         {
             "apiVersion": "2018-02-01",
@@ -34,7 +63,7 @@
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "properties": {
-                "securityRules": "[parameters('ruleSet')]"
+                "securityRules": "[union(parameters('ruleSet'), variables('ruleSetDefault'))]"
             }
         }
     ],

@@ -41,8 +41,8 @@
             }
         },
         "rulesSet": {
-            "type": "object",
-            "defaultValue": "[json('null')]",
+            "type": "array",
+            "defaultValue": "[array(json('null'))]",
             "metadata": {
                 "description": "Rules for the networkSecurityGroup of the subnet /basic/Microsoft.Network/networkSecurityGroups/securityRules/help.md#need-security-rules"
             }
@@ -55,16 +55,21 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
             "properties": {
-                "mode": "Complete",
+                "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Network/virtualNetworks/subnets/template.json', parameters('_artifactsLocationSasToken')))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "name": "[concat(parameters('name'), 'SBN00' )]",
-                    "addressPrefix": "[parameters('addressPrefix')]",
-                    "virtualNetworksParentREF": "[parameters('virtualNetworksParentREF')]",
-                    "ruleSet": "[parameters('rulesSet')]"
+                    "name": {
+                        "value": "[concat(parameters('name'), 'SBNZZ')]"
+                    },
+                    "addressPrefix": {
+                        "value": "[parameters('addressPrefix')]"
+                    },
+                    "virtualNetworksParentREF": {
+                        "value": "[parameters('virtualNetworksParentREF')]"
+                    }
                 }
             }
         },
@@ -73,14 +78,18 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
             "properties": {
-                "mode": "Complete",
+                "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.KeyVault/vaults/template.json', parameters('_artifactsLocationSasToken')))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "name": "[concat(parameters('name'), 'AKVZZ' )]",
-                    "tags": "[parameters('tags')]"
+                    "name": {
+                        "value": "[concat(parameters('name'), 'AKVZZ')]",
+                    },
+                    "tags": {
+                        "value": "[parameters('tags')]"
+                    }
                 }
             }
         },
@@ -89,15 +98,21 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
             "properties": {
-                "mode": "Complete",
+                "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Network/networkSecurityGroups/template.json', parameters('_artifactsLocationSasToken')))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "name": "[concat(parameters('name'), 'NSGZZ')]",
-                    "tags": "[parameters('tags')]",
-                    "ruleSet": "[parameters('rulesSet')]"
+                    "name": {
+                        "value": "[concat(parameters('name'), 'NSGZZ')]"
+                    },
+                    "tags": {
+                        "value": "[parameters('tags')]"
+                    },
+                    "ruleSet": {
+                        "value": "[parameters('rulesSet')]"
+                    }
                 }
             }
         },
@@ -106,16 +121,24 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2016-02-01",
             "properties": {
-                "mode": "Complete",
+                "mode": "Incremental",
                 "templateLink": {
                     "uri": "[uri(parameters('_artifactsLocation'), concat('basic/Microsoft.Compute/virtualMachines/template.json', parameters('_artifactsLocationSasToken')))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "name": "[concat(parameters('name'), 'MVMZZ' )]",
-                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
-                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
-                    "tags": "[parameters('tags')]"
+                    "name": {
+                        "value": "[concat(parameters('name'), 'MVMZZ')]"
+                    },
+                    "_artifactsLocation": {
+                        "value": "[parameters('_artifactsLocation')]"
+                    },
+                    "_artifactsLocationSasToken": {
+                        "value": "[parameters('_artifactsLocationSasToken')]"
+                    },
+                    "tags": {
+                        "value": "[parameters('tags')]"
+                    }
                 }
             }
         }
