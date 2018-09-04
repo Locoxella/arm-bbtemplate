@@ -11,20 +11,6 @@
                 "description": "Name for this resource/s"
             }
         },
-        "_artifactsLocation": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Base uri of the artifacts"
-            }
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Parameters for uri of the artifacts"
-            }
-        },
         "tags": {
             "type": "object",
             "metadata": {

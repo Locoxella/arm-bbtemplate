@@ -4,8 +4,8 @@
         "properties": {
             "description": "allow RDP connections",
             "direction": "Inbound",
-            "sourceAddressPrefix": "[parameters('source')",
-            "destinationAddressPrefix": "[parameters('destination')]",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
             "sourcePortRange": "*",
             "destinationPortRange": "3389",
             "access": "Allow",
@@ -17,10 +17,23 @@
         "properties": {
             "description": "allow HTTP connections",
             "direction": "Inbound",
-            "sourceAddressPrefix": "[parameters('source')]",
-            "destinationAddressPrefix": "[parameters('destination')]",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
             "sourcePortRange": "*",
             "destinationPortRange": "80",
+            "access": "Allow",
+            "protocol": "Tcp"
+        }
+    },
+    {
+        "name": "SSHAllow",
+        "properties": {
+            "description": "allow SSH connections",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "*",
+            "destinationAddressPrefix": "*",
+            "sourcePortRange": "*",
+            "destinationPortRange": "22",
             "access": "Allow",
             "protocol": "Tcp"
         }

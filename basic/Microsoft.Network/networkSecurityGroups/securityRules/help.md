@@ -4,8 +4,9 @@ You can create the security rules parameter by calling rules.json file. The form
 - __PROTOCOL__*Allow* (HTTPAllow: allow incoming traffic on TCP port 80)
 
 With shell:
-```bash
-curl https://basic/Microsoft.Network/securityRules/rules.json | jq -c '[.[] | select(.name | contains("HTTPAllow","RDPAllow"))]'
+```shell
+curl https://raw.githubusercontent.com/Locoxella/arm-bbtemplate/master/basic/Microsoft.Network/networkSecurityGroups/securityRules/parameters.rules.json
+ | jq -c '[.[] | select(.name | contains("HTTPAllow","RDPAllow", "SSHAllow"))]'
 ```
 Will return security rules to allow incoming HTTP and RDP:
 ```json

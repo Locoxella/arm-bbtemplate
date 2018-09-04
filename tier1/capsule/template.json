@@ -62,8 +62,6 @@
                 },
                 "parameters": {
                     "name": "[concat(parameters('name'), 'SBN00' )]",
-                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
-                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
                     "addressPrefix": "[parameters('addressPrefix')]",
                     "virtualNetworksParentREF": "[parameters('virtualNetworksParentREF')]",
                     "ruleSet": "[parameters('rulesSet')]"
@@ -82,8 +80,6 @@
                 },
                 "parameters": {
                     "name": "[concat(parameters('name'), 'AKVZZ' )]",
-                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
-                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
                     "tags": "[parameters('tags')]"
                 }
             }
@@ -99,9 +95,7 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "name": "[concat(parameters('name'), 'NSGZZ' )]",
-                    "_artifactsLocation": "[parameters('_artifactsLocation')]",
-                    "_artifactsLocationSasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "name": "[concat(parameters('name'), 'NSGZZ')]",
                     "tags": "[parameters('tags')]",
                     "ruleSet": "[parameters('rulesSet')]"
                 }
