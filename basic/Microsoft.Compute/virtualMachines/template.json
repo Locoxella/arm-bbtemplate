@@ -4,28 +4,29 @@
     "parameters": {
         "name": {
             "type": "string",
+            "defaultValue": "[concat(take(resourceGroup().name, 10), 'MVMZZ')]",
             "metadata": {
-                "description": "Name for the virtualMachine"
+                "description": "Name for this resource"
+            }
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags for this resources"
             }
         },
         "_artifactsLocation": {
             "type": "string",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Base uri of the artifacts"
             }
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
-            "defaultValue": null,
+            "defaultValue": "",
             "metadata": {
                 "description": "Parameters for uri of the artifacts"
-            }
-        },
-        "tags": {
-            "type": "object",
-            "metadata": {
-                "description": "Tags for this deployment {tagname:'value',...}"
             }
         },
         "admin": {
@@ -34,8 +35,9 @@
                 "description": "VM credentials for admin account {username:'',password:''}"
             }
         },
-        "networkInterfacesREF": {
+        "networkInterfaceREF": {
             "type": "object",
+            "defaultValue": "[json('null')]",
             "metadata": {
                 "description": "Reference to networkInterfaces for this VM"
             }
@@ -50,7 +52,7 @@
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
             "dependsOn": [
-                "[parameters('networkInterfacesREF')]"
+                "[parameters('networkInterfaceREF')]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -77,7 +79,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[parameters('networkInterfacesREF').id]"
+                            "id": "[parameters('networkInterfaceREF').id]"
                         }
                     ]
                 }
@@ -85,7 +87,7 @@
         }
     ],
     "outputs": {
-        "virtualMachinesREF": {
+        "result": {
             "type": "object",
             "value": "[reference(parameters('name'), '2017-03-30', 'Full')]"
         }

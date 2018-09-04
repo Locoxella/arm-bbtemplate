@@ -1,13 +1,16 @@
 # Microsoft.Network/virtualNetworks
 - [Microsoft.Network/virtualNetworks](#microsoftnetworkvirtualnetworks)
+    - [Parameters](#parameters)
     - [Examples](#examples)
-    - [Output](#output)
+    - [Outputs](#outputs)
+
+## Parameters
 ## Examples
 azure-cli
 ```shell
 az group deployment create --resource-group 'UWUCHLX000' --template-file ./basic/Microsoft.Network/virtualNetworks/template.json --parameters addressPrefixes='["10.0.0.0/16"]' name='UWUCHLX000VNTZZ' tags='{}'
 ```
-## Output
+## Outputs
 virtualNetwork object with .resourceId
 ```json
 {

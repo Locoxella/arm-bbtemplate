@@ -14,6 +14,57 @@
             "metadata": {
                 "description": "Tags for this resource/s"
             }
+        },
+        "accessPolicies": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "tenantId": "[subscription().tenantId]",
+                    "objectId": "",
+                    "permissions": {
+                        "keys": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "secrets": [
+                            "Get",
+                            "List",
+                            "Set",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "certificates": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore",
+                            "ManageContacts",
+                            "ManageIssuers",
+                            "GetIssuers",
+                            "ListIssuers",
+                            "SetIssuers",
+                            "DeleteIssuers"
+                        ]
+                    }
+                }
+            ],
+            "metadata": {
+                "description": "Permissions to this keyvault"
+            }
         }
     },
     "variables": {},
@@ -28,18 +79,21 @@
                 "enabledForDeployment": true,
                 "enabledForTemplateDeployment": true,
                 "enabledForDiskEncryption": true,
-                "enableSoftDelete": "true",
+                "enableSoftDelete": true,
                 "tenantId": "[subscription().tenantId]",
-                "accessPolicies": [
-                    {
-                        "tenantId": "[subscription().tenantId]",
-                        "objectId": "[subscription().subscriptionId]",
-                        "permissions": {
-                            "keys": "Get",
-                            "secrets": "List,Get,Set"
+                "accessPolicies": {
+                    "copy": [
+                        {
+                            "name": "accessPolicies",
+                            "count": "[length(parameters('accessPolicies'))]",
+                            "input": {
+                                "tenantId": "[if(empty(parameters('accessPolicies').tenantId), subscription().tenantId, parameters('accessPolicies').tenantId)]",
+                                "objectId": "[parameters('accessPolicies').objectId]",
+                                "permissions": "[parameters('accessPolicies').permissions]"
+                            }
                         }
-                    }
-                ],
+                    ]
+                },
                 "sku": {
                     "name": "standard",
                     "family": "A"
