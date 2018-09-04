@@ -39,7 +39,7 @@
         }
     ],
     "outputs": {
-        "virtualNetworksREF": {
+        "result": {
             "type": "object",
             "value": "[reference(parameters('name'), '2018-02-01', 'Full')]"
         }

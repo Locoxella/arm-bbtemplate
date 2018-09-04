@@ -3,10 +3,8 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
-            "type": "array",
-            "defaultValue": [
-                "[concat(resourceGroup().name, 'AKVZZ')]"
-            ],
+            "type": "string",
+            "defaultValue": "[concat(resourceGroup().name, 'AKVZZ')]",
             "metadata": {
                 "description": "Name for this resource/s"
             }

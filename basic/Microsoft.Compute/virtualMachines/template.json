@@ -36,7 +36,7 @@
         },
         "networkInterfacesREF": {
             "type": "object",
-            "metadate": {
+            "metadata": {
                 "description": "Reference to networkInterfaces for this VM"
             }
         }

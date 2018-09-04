@@ -61,10 +61,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[parameters('name')]",
             "location": "[resourceGroup().location]",
-            "tags": "[parameters('tags')]",
-            "properties": {
-                "securityRules": "[union(parameters('ruleSet'), variables('ruleSetDefault'))]"
-            }
+            "tags": "[parameters('tags')]"
         }
     ],
     "outputs": {
