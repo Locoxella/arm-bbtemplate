@@ -1,4 +1,7 @@
 # Microsoft.Network/virtualNetworks
+- [Microsoft.Network/virtualNetworks](#microsoftnetworkvirtualnetworks)
+    - [Examples](#examples)
+    - [Output](#output)
 ## Examples
 azure-cli
 ```shell

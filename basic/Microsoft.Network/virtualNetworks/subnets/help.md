@@ -2,7 +2,7 @@
 - [Microsoft.Networks/virtualNetworks/subnets](#microsoftnetworksvirtualnetworkssubnets)
     - [Parameters](#parameters)
     - [Examples](#examples)
-    - [Output](#output)
+    - [Outputs](#outputs)
 ## Parameters
 - **name** string. Name for this resource. Default "[concat(resourceGroup().name, '-subnets')]".
 - **addressPrefix** string. Tags for this resources. *Mandatory*.
@@ -46,7 +46,7 @@ arm template
     }
 }
 ```
-## Output
+## Outputs
 subnet object with .resourceId
 ```json
 {
