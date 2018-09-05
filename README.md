@@ -12,7 +12,7 @@
     - [The Dont's](#the-donts)
 
 # Naming convention
-![alt text](/animation.svg "Logo Title Text 1")
+![alt text](/media/test.4.svg "Logo Title Text 1")
 ## Codes for location
 | Location      | Region              | Sub-Region      | Cod |
 | ------------- | ------------------- | --------------- | --- |
